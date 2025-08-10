@@ -122,6 +122,17 @@ tools:
     convertedResults: Converted results
     expectedDurationIn: Expected duration in
     instructions: Add tasks with optimistic, nominal, and pessimistic estimates to calculate expected durations and project timeline.
+    importData: Import data
+    chooseFile: Choose file
+    supportedFormats: Supports CSV and JSON formats
+    exportCSV: Export CSV
+    copyMarkdown: Copy Markdown
+    exportJSON: Export JSON
+    importSuccess: Tasks imported successfully
+    importError: Import failed
+    invalidFormat: Invalid file format
+    projectName: Project name
+    projectNamePlaceholder: Optional project name
 
   svg-placeholder-generator:
     title: SVG placeholder generator

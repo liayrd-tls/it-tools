@@ -95,3 +95,14 @@ tools:
     convertedResults: Перетворені результати
     expectedDurationIn: Очікувана тривалість в
     instructions: Додайте задачі з оптимістичними, номінальними та песимістичними оцінками для розрахунку очікуваної тривалості та графіку проекту.
+    importData: Імпорт даних
+    chooseFile: Вибрати файл
+    supportedFormats: Підтримуються CSV та JSON формати
+    exportCSV: Експорт CSV
+    copyMarkdown: Копіювати Markdown
+    exportJSON: Експорт JSON
+    importSuccess: Задачі успішно імпортовано
+    importError: Помилка імпорту
+    invalidFormat: Невірний формат файлу
+    projectName: Назва проекту
+    projectNamePlaceholder: Опціональна назва проекту

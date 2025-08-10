@@ -7,10 +7,18 @@ import {
   getTimeUnitOptions,
   convertFromHours,
   validateEstimate,
+  exportToCSV,
+  exportToMarkdown,
+  exportToJSON,
+  downloadFile,
+  importFromCSV,
+  importFromJSON,
+  generateFileName,
 } from './pert-estimator.service';
 import { translate } from '@/plugins/i18n.plugin';
 
 const tasks = ref<Task[]>([]);
+const projectName = ref('');
 
 const newTaskName = ref('');
 const optimisticValue = ref<number>();
@@ -70,11 +78,112 @@ function clearAllTasks() {
 function getTaskDisplayName(task: Task, index: number): string {
   return task.name || `Task ${index + 1}`;
 }
+
+// Import/Export state
+const importError = ref('');
+const importSuccess = ref(false);
+
+// Import functions
+async function handleImportFile(options: { file: { file?: File } }) {
+  const file = options.file.file;
+  if (!file) return;
+
+  importError.value = '';
+  importSuccess.value = false;
+
+  try {
+    const content = await file.text();
+    const extension = file.name.toLowerCase().split('.').pop();
+    
+    let result;
+    if (extension === 'csv') {
+      result = importFromCSV(content);
+    } else if (extension === 'json') {
+      result = importFromJSON(content);
+    } else {
+      importError.value = translate('tools.pert-estimator.invalidFormat');
+      return;
+    }
+
+    if (!result.isValid) {
+      importError.value = result.errors.join('; ');
+      return;
+    }
+
+    // Import project name if available
+    if (result.projectName) {
+      projectName.value = result.projectName;
+    }
+
+    // Ask user if they want to replace or append
+    if (tasks.value.length > 0) {
+      const replace = confirm('Replace existing tasks or add to current tasks? (OK = Replace, Cancel = Add)');
+      if (replace) {
+        tasks.value = result.tasks;
+      } else {
+        tasks.value.push(...result.tasks);
+      }
+    } else {
+      tasks.value = result.tasks;
+    }
+
+    importSuccess.value = true;
+    setTimeout(() => importSuccess.value = false, 3000);
+
+  } catch (error) {
+    importError.value = `Import failed: ${error}`;
+  }
+}
+
+// Export functions  
+function exportToCSVFile() {
+  const csv = exportToCSV(tasks.value, projectName.value || undefined);
+  const filename = generateFileName(projectName.value, 'csv');
+  downloadFile(csv, filename, 'text/csv');
+}
+
+async function copyMarkdownTable() {
+  const markdown = exportToMarkdown(tasks.value, projectSummary.value, projectName.value || undefined);
+  try {
+    await navigator.clipboard.writeText(markdown);
+    // Could show success message here
+  } catch (error) {
+    console.error('Failed to copy to clipboard:', error);
+  }
+}
+
+function exportToJSONFile() {
+  const json = exportToJSON(tasks.value, projectSummary.value, projectName.value || undefined);
+  const filename = generateFileName(projectName.value, 'json');
+  downloadFile(json, filename, 'application/json');
+}
 </script>
 
 <template>
   <div style="flex: 0 0 100%">
     <div style="margin: 0 auto; max-width: 800px">
+      <!-- Import Section -->
+      <c-card mb-4>
+        <h3 mb-3>{{ translate('tools.pert-estimator.importData') }}</h3>
+        <n-upload
+          :file-list="[]"
+          @change="handleImportFile"
+          accept=".csv,.json"
+          :show-file-list="false"
+        >
+          <n-button>{{ translate('tools.pert-estimator.chooseFile') }}</n-button>
+        </n-upload>
+        <div mt-2 text-sm opacity-70>
+          {{ translate('tools.pert-estimator.supportedFormats') }}
+        </div>
+        <n-alert v-if="importError" type="error" mt-3 closable @close="importError = ''">
+          {{ importError }}
+        </n-alert>
+        <n-alert v-if="importSuccess" type="success" mt-3 closable @close="importSuccess = false">
+          {{ translate('tools.pert-estimator.importSuccess') }}
+        </n-alert>
+      </c-card>
+
       <!-- Task Input Form -->
       <c-card mb-4>
         <div mb-4>
@@ -195,6 +304,27 @@ function getTaskDisplayName(task: Task, index: number): string {
       <!-- Project Summary -->
       <c-card v-if="tasks.length > 0">
         <h3 mb-4>{{ translate('tools.pert-estimator.projectSummary') }}</h3>
+        
+        <!-- Project Name -->
+        <n-form-item :label="translate('tools.pert-estimator.projectName')" label-placement="left" mb-4>
+          <n-input 
+            v-model:value="projectName" 
+            :placeholder="translate('tools.pert-estimator.projectNamePlaceholder')"
+          />
+        </n-form-item>
+        
+        <!-- Export Buttons -->
+        <div mb-4 flex gap-2 flex-wrap>
+          <n-button size="small" @click="exportToCSVFile">
+            {{ translate('tools.pert-estimator.exportCSV') }}
+          </n-button>
+          <n-button size="small" @click="copyMarkdownTable">
+            {{ translate('tools.pert-estimator.copyMarkdown') }}
+          </n-button>
+          <n-button size="small" @click="exportToJSONFile">
+            {{ translate('tools.pert-estimator.exportJSON') }}
+          </n-button>
+        </div>
         
         <div grid grid-cols-1 md:grid-cols-3 gap-4>
           <div>

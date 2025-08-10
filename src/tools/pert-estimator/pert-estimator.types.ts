@@ -32,3 +32,18 @@ export interface PertCalculationResult {
   standardDeviation: number;
   variance: number;
 }
+
+export interface ExportData {
+  projectName?: string;
+  tasks: Task[];
+  projectSummary: ProjectSummary;
+  exportedAt: string;
+  version: string;
+}
+
+export interface ImportResult {
+  projectName?: string;
+  tasks: Task[];
+  isValid: boolean;
+  errors: string[];
+}
