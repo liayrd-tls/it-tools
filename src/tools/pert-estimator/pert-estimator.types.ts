@@ -1,0 +1,34 @@
+export type TimeUnit = 'minutes' | 'hours' | 'days' | 'weeks';
+
+export interface TimeValue {
+  value: number;
+  unit: TimeUnit;
+}
+
+export interface TaskEstimate {
+  optimistic: TimeValue;
+  nominal: TimeValue;
+  pessimistic: TimeValue;
+}
+
+export interface Task {
+  id: string;
+  name?: string;
+  estimate: TaskEstimate;
+  expectedDuration: number;
+  standardDeviation: number;
+  variance: number;
+}
+
+export interface ProjectSummary {
+  totalExpectedDuration: number;
+  totalStandardDeviation: number;
+  totalVariance: number;
+  tasks: Task[];
+}
+
+export interface PertCalculationResult {
+  expectedDuration: number;
+  standardDeviation: number;
+  variance: number;
+}

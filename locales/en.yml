@@ -97,6 +97,32 @@ tools:
     title: Percentage calculator
     description: Easily calculate percentages from a value to another value, or from a percentage to a value.
 
+  pert-estimator:
+    title: PERT estimator
+    description: Calculate project task durations using PERT (Program Evaluation and Review Technique) methodology with optimistic, nominal, and pessimistic estimates.
+    addTask: Add task
+    taskName: Task name
+    taskNamePlaceholder: Optional task name
+    optimisticEstimate: Optimistic estimate
+    nominalEstimate: Nominal estimate
+    pessimisticEstimate: Pessimistic estimate
+    value: Value
+    optimistic: Optimistic
+    nominal: Nominal
+    pessimistic: Pessimistic
+    expected: Expected
+    standardDeviation: Std. deviation
+    remove: Remove
+    clearAll: Clear all
+    tasks: Tasks
+    projectSummary: Project summary
+    totalExpectedDuration: Total expected duration
+    totalStandardDeviation: Total standard deviation
+    totalVariance: Total variance
+    convertedResults: Converted results
+    expectedDurationIn: Expected duration in
+    instructions: Add tasks with optimistic, nominal, and pessimistic estimates to calculate expected durations and project timeline.
+
   svg-placeholder-generator:
     title: SVG placeholder generator
     description: Generate svg images to use as a placeholder in your applications.

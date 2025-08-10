@@ -70,3 +70,28 @@ tools:
     measurement: Вимірювання
     text: Текст
     data: Дані
+  pert-estimator:
+    title: PERT оцінювач
+    description: Розраховуйте тривалість виконання задач проекту за методологією PERT (Program Evaluation and Review Technique) з оптимістичними, номінальними та песимістичними оцінками.
+    addTask: Додати задачу
+    taskName: Назва задачі
+    taskNamePlaceholder: Опціональна назва задачі
+    optimisticEstimate: Оптимістична оцінка
+    nominalEstimate: Номінальна оцінка
+    pessimisticEstimate: Песимістична оцінка
+    value: Значення
+    optimistic: Оптимістична
+    nominal: Номінальна
+    pessimistic: Песимістична
+    expected: Очікувана
+    standardDeviation: Стд. відхилення
+    remove: Видалити
+    clearAll: Очистити все
+    tasks: Задачі
+    projectSummary: Підсумок проекту
+    totalExpectedDuration: Загальна очікувана тривалість
+    totalStandardDeviation: Загальне стандартне відхилення
+    totalVariance: Загальна дисперсія
+    convertedResults: Перетворені результати
+    expectedDurationIn: Очікувана тривалість в
+    instructions: Додайте задачі з оптимістичними, номінальними та песимістичними оцінками для розрахунку очікуваної тривалості та графіку проекту.
