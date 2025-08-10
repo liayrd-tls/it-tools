@@ -47,3 +47,11 @@ export interface ImportResult {
   isValid: boolean;
   errors: string[];
 }
+
+export interface SavedProject {
+  id: string;
+  name: string;
+  tasks: Task[];
+  createdAt: string;
+  updatedAt: string;
+}

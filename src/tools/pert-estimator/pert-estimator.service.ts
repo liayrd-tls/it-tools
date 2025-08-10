@@ -1,4 +1,4 @@
-import type { TimeUnit, TimeValue, TaskEstimate, PertCalculationResult, ProjectSummary, Task, ExportData, ImportResult } from './pert-estimator.types';
+import type { TimeUnit, TimeValue, TaskEstimate, PertCalculationResult, ProjectSummary, Task, ExportData, ImportResult, SavedProject } from './pert-estimator.types';
 
 const TIME_UNIT_TO_HOURS: Record<TimeUnit, number> = {
   minutes: 1 / 60,
@@ -403,4 +403,84 @@ export function validateImportTaskData(taskData: any): boolean {
     ['minutes', 'hours', 'days', 'weeks'].includes(taskData.estimate.nominal.unit) &&
     ['minutes', 'hours', 'days', 'weeks'].includes(taskData.estimate.pessimistic.unit)
   );
+}
+
+// Project management functions
+const PROJECTS_STORAGE_KEY = 'pert-estimator-projects';
+
+export function saveProject(name: string, tasks: Task[]): SavedProject {
+  const projects = getSavedProjects();
+  const now = new Date().toISOString();
+  
+  const project: SavedProject = {
+    id: crypto.randomUUID(),
+    name,
+    tasks: JSON.parse(JSON.stringify(tasks)), // Deep copy
+    createdAt: now,
+    updatedAt: now,
+  };
+  
+  projects.push(project);
+  localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projects));
+  
+  return project;
+}
+
+export function updateProject(projectId: string, name: string, tasks: Task[]): SavedProject | null {
+  const projects = getSavedProjects();
+  const projectIndex = projects.findIndex(p => p.id === projectId);
+  
+  if (projectIndex === -1) {
+    return null;
+  }
+  
+  projects[projectIndex] = {
+    ...projects[projectIndex],
+    name,
+    tasks: JSON.parse(JSON.stringify(tasks)), // Deep copy
+    updatedAt: new Date().toISOString(),
+  };
+  
+  localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projects));
+  
+  return projects[projectIndex];
+}
+
+export function getSavedProjects(): SavedProject[] {
+  try {
+    const stored = localStorage.getItem(PROJECTS_STORAGE_KEY);
+    if (!stored) return [];
+    
+    const projects = JSON.parse(stored);
+    return Array.isArray(projects) ? projects : [];
+  } catch (error) {
+    console.error('Error loading saved projects:', error);
+    return [];
+  }
+}
+
+export function deleteProject(projectId: string): boolean {
+  const projects = getSavedProjects();
+  const filteredProjects = projects.filter(p => p.id !== projectId);
+  
+  if (filteredProjects.length === projects.length) {
+    return false; // Project not found
+  }
+  
+  localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(filteredProjects));
+  return true;
+}
+
+export function loadProject(projectId: string): SavedProject | null {
+  const projects = getSavedProjects();
+  return projects.find(p => p.id === projectId) || null;
+}
+
+export function duplicateProject(projectId: string): SavedProject | null {
+  const originalProject = loadProject(projectId);
+  if (!originalProject) {
+    return null;
+  }
+  
+  return saveProject(`${originalProject.name} (Copy)`, originalProject.tasks);
 }

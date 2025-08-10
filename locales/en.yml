@@ -133,6 +133,21 @@ tools:
     invalidFormat: Invalid file format
     projectName: Project name
     projectNamePlaceholder: Optional project name
+    savedProjects: Saved Projects
+    newProjectName: New project name
+    save: Save
+    noSavedProjects: No saved projects yet
+    duplicate: Duplicate
+    delete: Delete
+    confirmDelete: Are you sure you want to delete this project?
+    rename: Rename
+    renameProject: Rename Project
+    exportProject: Export Project
+    importProject: Import Project
+    chooseProjectFile: Choose Project File
+    onlyJsonSupported: Only JSON format supported
+    projectImportSuccess: Project imported successfully
+    cancel: Cancel
 
   svg-placeholder-generator:
     title: SVG placeholder generator

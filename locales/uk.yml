@@ -106,3 +106,18 @@ tools:
     invalidFormat: Невірний формат файлу
     projectName: Назва проекту
     projectNamePlaceholder: Опціональна назва проекту
+    savedProjects: Збережені проекти
+    newProjectName: Назва нового проекту
+    save: Зберегти
+    noSavedProjects: Поки що немає збережених проектів
+    duplicate: Дублювати
+    delete: Видалити
+    confirmDelete: Ви впевнені, що хочете видалити цей проект?
+    rename: Перейменувати
+    renameProject: Перейменування проекту
+    exportProject: Експортувати проект
+    importProject: Імпорт проекту
+    chooseProjectFile: Вибрати файл проекту
+    onlyJsonSupported: Підтримується тільки JSON формат
+    projectImportSuccess: Проект успішно імпортовано
+    cancel: Скасувати
